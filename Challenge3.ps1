@@ -1,37 +1,35 @@
-﻿function getKey($dict)
-{
-    $keys = list($dict)
-    if (len($keys) -ne 1){
-        raise Exception('either multiple keys or empty dict found')}
-    else{
-        return keys[0]
-        }
-}
+function getNestedValue {
+   param(
+        [hashtable] $dict,
+         $str
+    )
 
-function getNestedValue($dict, $str)
-{
-    # print(obj, key, isFound)
-    if ($dic.gettype().Name -ne 'Dictionary'){
-        return None
-        }
-    if ($str -in $dict.keys())    { 
-         if ($dic.gettype().Name -ne 'Dictionary'){
-            return getNestedValue($dict.keys, getKey($dict.keys)) }
-           
-        else
-            
-           { return getKey($dict) }
-       }
-    else{
-        $nestedKey = getKey($dict)
-        
-        return getNestedValue($nestedKey, $str)
-        }
+for ($obj.values.GetType()){
+    $obj = $obj.values
+    
+     if (($obj.GetType().Name -like 'Hashtable') -or ($obj.GetType().Name -like 'ValueCollection'))
+     {
+     continue
+     }
+
+    }
+    else {
+    return $obj
     
 }
+}
 
-#if __name__ == '__main__':
- $obj = @{a= {b={ c = 'd'}}}
- #$obj.gettype()
- value = getNestedValue($obj, 'c')
-    print(value)
+$obj =@{'a1'= @{
+                  'b1'= @{
+                  'c1'='d1'
+                       }
+                     }
+                              
+         }
+
+
+
+
+ $value = getNestedValue -dict $obj -str 'c1'
+ write-host $value
+   
